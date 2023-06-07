@@ -3,6 +3,7 @@ package controllers
 import (
 	"errors"
 	"reflect"
+	"time"
 	"myHttpServer/models"
 	"myHttpServer/repository"
 )
@@ -13,6 +14,7 @@ func SaveData(data *models.Data) error {
 	if err != nil {
 		return err
 	}
+	data.CreatedAt = time.Now().UnixMilli()
 	repository.MongoRepo.SaveData(data)
 	return nil
 }
@@ -29,7 +31,7 @@ func validateData(data *models.Data) error {
 	for key, value := range data.Data {
 		typeOfValue := reflect.TypeOf(value)
 		if schema.Schema[key] != typeOfValue.Kind() {
-			return errors.New("data type mismatch")
+			return errors.New("data type mismatch " + key + " expected " + schema.Schema[key].String() + " got " + typeOfValue.Kind().String())
 		}
 	}
 	return nil
