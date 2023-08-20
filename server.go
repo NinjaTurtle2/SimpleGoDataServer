@@ -16,7 +16,6 @@ func main() {
 	public := r.Group("/api")
 	public.POST("/login", handlers.LoginUser)
 	public.POST("/users/:special", handlers.CreateUser)
-	
 
 	//Private Routes
 	private := r.Group("/api")
@@ -33,11 +32,11 @@ func main() {
 	private.POST("/data", handlers.PostData)
 
 	private.POST("/task", handlers.PostTask)
-	
+
 	//router.GET("/sessions/:key", handlers.GetSession)
 	//router.POST("/sessions/:username", handlers.CreateSession)
 
-	err:= r.Run("localhost:8080")
+	err := r.Run(":8080")
 	if err != nil {
 		fmt.Println(err)
 	}
