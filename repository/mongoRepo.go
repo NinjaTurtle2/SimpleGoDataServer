@@ -264,10 +264,20 @@ func (r *mongoRepo) SaveTask(task *models.Task) {
 	defer cancel()
 	//Get the collection
 	collection := r.client.Database(*r.database).Collection(*r.taskCollection)
+
+	opts :=options.FindOneAndUpdate().SetUpsert(true)
+	updateTask := bson.D{{Key: "$set", Value: bson.D{
+		{Key: "username", Value: task.Username},
+		{Key: "type", Value: task.Type},
+		{Key: "updatedAt", Value: task.UpdatedAt},
+		{Key: "complete", Value: task.Complete},
+		{Key: "date",Value: task.Date},
+	}}}
+
 	//Insert the data
-	insertedId, err := collection.UpdateOne(ctx, bson.D{{Key: "username", Value: task.Username},{Key:"date", Value: task.Date}},task)
+	result := collection.FindOneAndUpdate(ctx, bson.D{{Key: "username", Value: task.Username}, {Key: "date", Value: task.Date}}, updateTask, opts)
+	err := result.Decode(task)
 	if err != nil {
 		log.Println(err)
 	}
-	task.ID = insertedId.UpsertedID.(primitive.ObjectID)
 }

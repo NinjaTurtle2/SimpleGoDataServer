@@ -11,3 +11,5 @@ const TASK_COLLECTION = "TASK_COLLECTION"
 
 const SESSION_KEY_PREFIX = "ssk_"
 const SCHEMA_KEY_PREFIX = "sk_"
+
+const CONTEXT_CURRENT_USER = "currentUser"

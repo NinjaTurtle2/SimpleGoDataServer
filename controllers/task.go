@@ -8,11 +8,12 @@ import (
 )
 
 // Save task model to mongoRepo
-func SaveTask(task *models.Task) error {
+func SaveTask(username *string, task *models.Task) error {
 	err := validateTask(task)
 	if err != nil {
 		return err
 	}
+	task.Username = *username
 	task.UpdatedAt = time.Now().UnixMilli()
 	repository.MongoRepo.SaveTask(task)
 	return nil

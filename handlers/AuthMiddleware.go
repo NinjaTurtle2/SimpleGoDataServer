@@ -4,8 +4,8 @@ import (
 	"myHttpServer/controllers"
 	"myHttpServer/utils"
 	http "net/http"
-	"github.com/gin-gonic/gin"
 
+	"github.com/gin-gonic/gin"
 )
 
 //Auth token middleware for gin
@@ -35,7 +35,7 @@ func SessionMiddleware() gin.HandlerFunc {
 		}
 
 		//Set session in context
-		c.Set("user", user)
+		c.Set(utils.CONTEXT_CURRENT_USER, *user)
 
 		//Continue if token is valid
 		c.Next()
