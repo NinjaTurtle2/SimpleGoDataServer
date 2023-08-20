@@ -265,6 +265,7 @@ func (r *mongoRepo) SaveTask(task *models.Task) {
 	//Get the collection
 	collection := r.client.Database(*r.database).Collection(*r.taskCollection)
 
+	findFilter := bson.D{{Key: "username", Value: task.Username}, {Key: "date", Value: task.Date}}
 	opts :=options.FindOneAndUpdate().SetUpsert(true)
 	updateTask := bson.D{{Key: "$set", Value: bson.D{
 		{Key: "username", Value: task.Username},
@@ -275,8 +276,12 @@ func (r *mongoRepo) SaveTask(task *models.Task) {
 	}}}
 
 	//Insert the data
-	result := collection.FindOneAndUpdate(ctx, bson.D{{Key: "username", Value: task.Username}, {Key: "date", Value: task.Date}}, updateTask, opts)
+	result := collection.FindOneAndUpdate(ctx, findFilter, updateTask, opts)
 	err := result.Decode(task)
+	if err != nil {
+		log.Println(err)
+	}
+	err = collection.FindOne(ctx, findFilter).Decode(task)
 	if err != nil {
 		log.Println(err)
 	}

@@ -7,8 +7,8 @@ import (
 	"time"
 )
 
-//Get User using mongoRepo
-func GetUser(id string) (*models.User,error) {
+// Get User using mongoRepo
+func GetUser(id string) (*models.User, error) {
 	user := repository.MongoRepo.GetUserByID(id)
 	if user == nil {
 		return nil, &utils.NotFoundError{Message: "User not found"}
@@ -16,7 +16,7 @@ func GetUser(id string) (*models.User,error) {
 	return user, nil
 }
 
-//Get User by username using mongoRepo
+// Get User by username using mongoRepo
 func GetUserByUsername(username string) (*models.User, error) {
 	user := repository.MongoRepo.GetUserByUsername(username)
 	if user == nil {
@@ -25,15 +25,14 @@ func GetUserByUsername(username string) (*models.User, error) {
 	return user, nil
 }
 
-//Get Users using mongoRepo
+// Get Users using mongoRepo
 func GetUsers() []models.User {
 	return repository.MongoRepo.GetUsers()
 }
 
-
-//Create User using mongoRepo	
+// Create User using mongoRepo
 func CreateUser(user *models.User) (*models.User, error) {
-	
+
 	existingUser, _ := GetUserByUsername(user.Username)
 	if existingUser != nil {
 		return nil, &utils.AlreadyExistsError{Message: "User already exists"}
@@ -48,13 +47,13 @@ func CreateUser(user *models.User) (*models.User, error) {
 	return user, nil
 }
 
-//Delete User Using mongoRepo
+// Delete User Using mongoRepo
 func DeleteUser(id string) error {
 	repository.MongoRepo.DeleteUser(id)
 	return nil
 }
 
-//Login User using mongoRepo
+// Login User using mongoRepo
 func LoginUser(user *models.User) (*models.Session, error) {
 	existingUser, err := GetUserByUsername(user.Username)
 
@@ -82,7 +81,6 @@ func LoginUser(user *models.User) (*models.Session, error) {
 
 	return session, nil
 }
-
 
 func updateUser(user *models.User) (*models.User, error) {
 	repository.MongoRepo.UpdateUser(user)
