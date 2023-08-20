@@ -27,6 +27,7 @@ type mongoRepo struct {
 	userCollection   *string
 	schemaCollection *string
 	dataCollection   *string
+	taskCollection   *string
 }
 
 // Create a new repository
@@ -35,7 +36,7 @@ func NewMongoRepo() *mongoRepo {
 	godotenv.Load()
 	username := os.Getenv(utils.MONGO_USERNAME)
 	password := os.Getenv(utils.MONGO_PASSWORD)
-	uri := fmt.Sprintf(os.Getenv(utils.MONGO_URI),username,password)
+	uri := fmt.Sprintf(os.Getenv(utils.MONGO_URI), username, password)
 	serverAPI := options.ServerAPI(options.ServerAPIVersion1)
 	clientOptions := options.Client().ApplyURI(uri).SetServerAPIOptions(serverAPI)
 	//Localhost connection
@@ -50,11 +51,12 @@ func NewMongoRepo() *mongoRepo {
 	}
 	fmt.Println("Pinged your deployment. You successfully connected to MongoDB!")
 	return &mongoRepo{
-		client:   client,
-		database: utils.StringPointer(os.Getenv(utils.DATABASE)),
-		userCollection: utils.StringPointer(os.Getenv(utils.USER_COLLECTION)),
+		client:           client,
+		database:         utils.StringPointer(os.Getenv(utils.DATABASE)),
+		userCollection:   utils.StringPointer(os.Getenv(utils.USER_COLLECTION)),
 		schemaCollection: utils.StringPointer(os.Getenv(utils.SCHEMA_COLLECTION)),
-		dataCollection: utils.StringPointer(os.Getenv(utils.DATA_COLLECTION)),
+		dataCollection:   utils.StringPointer(os.Getenv(utils.DATA_COLLECTION)),
+		taskCollection:   utils.StringPointer(os.Getenv(utils.TASK_COLLECTION)),
 	}
 }
 
@@ -88,7 +90,7 @@ func (r *mongoRepo) GetSchemas() []models.Schema {
 	return schemas
 }
 
-//Get Schema by ID
+// Get Schema by ID
 func (r *mongoRepo) GetSchemaByID(id string) *models.Schema {
 	objectID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
@@ -108,9 +110,8 @@ func (r *mongoRepo) GetSchemaByID(id string) *models.Schema {
 	return &schema
 }
 
-
 // Save a schema
-func (r *mongoRepo) SaveSchema(schema *models.Schema){
+func (r *mongoRepo) SaveSchema(schema *models.Schema) {
 	//Create a context
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -175,7 +176,7 @@ func (r *mongoRepo) GetUserByID(id string) *models.User {
 	return &user
 }
 
-//Get User by username
+// Get User by username
 func (r *mongoRepo) GetUserByUsername(username string) *models.User {
 	//Create a context
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
@@ -193,9 +194,8 @@ func (r *mongoRepo) GetUserByUsername(username string) *models.User {
 	return &user
 }
 
-
 // Save a user
-func (r *mongoRepo) SaveUser(user *models.User){
+func (r *mongoRepo) SaveUser(user *models.User) {
 	//Create a context
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -209,7 +209,7 @@ func (r *mongoRepo) SaveUser(user *models.User){
 	user.ID = insertedId.InsertedID.(primitive.ObjectID)
 }
 
-//Update a user
+// Update a user
 func (r *mongoRepo) UpdateUser(user *models.User) {
 	//Create a context
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
@@ -243,7 +243,7 @@ func (r *mongoRepo) DeleteUser(id string) {
 }
 
 // Save Data to mongo
-func (r *mongoRepo) SaveData(data *models.Data){
+func (r *mongoRepo) SaveData(data *models.Data) {
 	//Create a context
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -255,4 +255,19 @@ func (r *mongoRepo) SaveData(data *models.Data){
 		log.Println(err)
 	}
 	data.ID = insertedId.InsertedID.(primitive.ObjectID)
+}
+
+// Save Task to mongo
+func (r *mongoRepo) SaveTask(task *models.Task) {
+	//Create a context
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	//Get the collection
+	collection := r.client.Database(*r.database).Collection(*r.taskCollection)
+	//Insert the data
+	insertedId, err := collection.UpdateOne(ctx, bson.D{{Key: "username", Value: task.Username},{Key:"date", Value: task.Date}},task)
+	if err != nil {
+		log.Println(err)
+	}
+	task.ID = insertedId.UpsertedID.(primitive.ObjectID)
 }

@@ -32,6 +32,7 @@ func main() {
 
 	private.POST("/data", handlers.PostData)
 
+	private.POST("/task", handlers.PostTask)
 	
 	//router.GET("/sessions/:key", handlers.GetSession)
 	//router.POST("/sessions/:username", handlers.CreateSession)

@@ -34,3 +34,18 @@ type Data struct {
 	Data      map[string]interface{} `json:"data"`
 	CreatedAt int64                  `json:"createdAt"`
 }
+
+type Task struct {
+	ID        primitive.ObjectID `bson:"_id,omitempty"`
+	Username  string             `json:"username"`
+	Date      int64              `json:"date"`
+	Type      TaskType           `json:"type"`
+	Complete  bool               `json:"complete"`
+	UpdatedAt int64              `json:"updatedAt"`
+}
+
+type TaskType string
+
+const (
+	Music TaskType = "MUSIC"
+)
