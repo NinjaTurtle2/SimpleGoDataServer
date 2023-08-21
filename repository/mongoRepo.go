@@ -257,7 +257,7 @@ func (r *mongoRepo) SaveData(data *models.Data) {
 	data.ID = insertedId.InsertedID.(primitive.ObjectID)
 }
 
-func (r *mongoRepo) GetTaskById(taskId *string) *models.Task{
+func (r *mongoRepo) GetTaskById(taskId *string) *models.Task {
 	objectID, err := primitive.ObjectIDFromHex(*taskId)
 	if err != nil {
 		log.Println(err)
@@ -287,13 +287,14 @@ func (r *mongoRepo) SaveTask(task *models.Task) {
 	collection := r.client.Database(*r.database).Collection(*r.taskCollection)
 
 	findFilter := bson.D{{Key: "username", Value: task.Username}, {Key: "date", Value: task.Date}}
-	opts :=options.FindOneAndUpdate().SetUpsert(true)
+	opts := options.FindOneAndUpdate().SetUpsert(true)
 	updateTask := bson.D{{Key: "$set", Value: bson.D{
 		{Key: "username", Value: task.Username},
 		{Key: "type", Value: task.Type},
 		{Key: "updatedAt", Value: task.UpdatedAt},
 		{Key: "complete", Value: task.Complete},
-		{Key: "date",Value: task.Date},
+		{Key: "date", Value: task.Date},
+		{Key: "duration", Value: task.Duration},
 	}}}
 
 	//Insert the data

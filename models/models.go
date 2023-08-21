@@ -2,7 +2,6 @@ package models
 
 import (
 	"reflect"
-
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -43,6 +42,7 @@ type Task struct {
 	Date      int64              `json:"date"`
 	Type      TaskType           `json:"type"`
 	Complete  bool               `json:"complete"`
+	Duration  int64              `json:"duration"`
 	UpdatedAt int64              `json:"updatedAt"`
 	RowNumber int64              `json:"rowNumber"`
 }

@@ -87,7 +87,7 @@ func (s *sheetsRepo) SaveUser(user *models.User) {
 func (s *sheetsRepo) SaveTask(task *models.Task) {
 	//Update value in the sheet.
 	row := &sheets.ValueRange{
-		Values: [][]interface{}{{task.Date, task.Username, task.Type, task.Complete, task.UpdatedAt, task.RowNumber}},
+		Values: [][]interface{}{{task.Date, task.Username, task.Type, task.Duration, task.Complete, task.UpdatedAt, task.RowNumber}},
 	}
 
 	cellRange := fmt.Sprintf(utils.CELL_RANGE_FORMAT, *s.taskSheetTitle, strconv.Itoa(int(task.RowNumber)), strconv.Itoa(int(task.RowNumber)))
