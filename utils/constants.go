@@ -13,3 +13,10 @@ const SESSION_KEY_PREFIX = "ssk_"
 const SCHEMA_KEY_PREFIX = "sk_"
 
 const CONTEXT_CURRENT_USER = "currentUser"
+
+const SHEETS_SERVICE_ACCOUNT_KEY_PATH = "SHEETS_SERVICE_ACCOUNT_KEY_PATH"
+
+//https://docs.google.com/spreadsheets/d/1ouDk9gxAWQ2gs8iyQVSRCVvmjd8fHwQHn8mNtA7dMa0/edit#gid=1802608806
+const MASTER_SHEET = "MASTER_SHEET"
+const USER_SHEET = "USER_SHEET"
+const TASK_SHEET = "TASK_SHEET"

@@ -1,3 +1,5 @@
 
 .env
 myHttpServer
+.vscode
+resources/.sheets-service-secret.json

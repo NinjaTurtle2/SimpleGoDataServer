@@ -7,4 +7,5 @@ use (
 	./models
 	./repository
 	./utils
+	./tests
 )
