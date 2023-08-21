@@ -29,3 +29,17 @@ func PostTask(c *gin.Context) {
 	}
 	c.JSON(http.StatusCreated, task)
 }
+
+func TaskMongoWebhook(c *gin.Context) {
+	taskId := c.Param(utils.TASK_ID)
+	if taskId == "" {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+	err := controllers.SyncTaskToSheet(&taskId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, "SUCCESS")
+}

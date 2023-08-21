@@ -9,8 +9,8 @@ import (
 
 func TestSheetsService(t *testing.T) {
 	fmt.Println("Hello World")
-	repository.SheetsRepo.SaveTask(&models.Task{
+	repository.SheetsRepo.SaveUser(&models.User{
 		Username: "yolo",
-		Type: models.Music,
+		RowNumber: 5,
 	})
 }

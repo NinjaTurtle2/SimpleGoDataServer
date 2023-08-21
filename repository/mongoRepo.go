@@ -257,6 +257,27 @@ func (r *mongoRepo) SaveData(data *models.Data) {
 	data.ID = insertedId.InsertedID.(primitive.ObjectID)
 }
 
+func (r *mongoRepo) GetTaskById(taskId *string) *models.Task{
+	objectID, err := primitive.ObjectIDFromHex(*taskId)
+	if err != nil {
+		log.Println(err)
+		return nil
+	}
+	//Create a context
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	//Get the collection
+	collection := r.client.Database(*r.database).Collection(*r.taskCollection)
+	//Find the user
+	var task models.Task
+	err = collection.FindOne(ctx, bson.D{{Key: "_id", Value: objectID}}).Decode(&task)
+	if err != nil {
+		log.Println(err)
+		return nil
+	}
+	return &task
+}
+
 // Save Task to mongo
 func (r *mongoRepo) SaveTask(task *models.Task) {
 	//Create a context

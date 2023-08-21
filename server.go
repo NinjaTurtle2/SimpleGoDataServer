@@ -16,6 +16,8 @@ func main() {
 	public := r.Group("/api")
 	public.POST("/login", handlers.LoginUser)
 	public.POST("/users/:special", handlers.CreateUser)
+	public.POST("/task/updated/:taskid", handlers.TaskMongoWebhook)
+	public.POST("/user/updated/:userid", handlers.UserMongoWebhook)
 
 	//Private Routes
 	private := r.Group("/api")

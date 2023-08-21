@@ -16,7 +16,13 @@ const CONTEXT_CURRENT_USER = "currentUser"
 
 const SHEETS_SERVICE_ACCOUNT_KEY_PATH = "SHEETS_SERVICE_ACCOUNT_KEY_PATH"
 
-//https://docs.google.com/spreadsheets/d/1ouDk9gxAWQ2gs8iyQVSRCVvmjd8fHwQHn8mNtA7dMa0/edit#gid=1802608806
+// https://docs.google.com/spreadsheets/d/1ouDk9gxAWQ2gs8iyQVSRCVvmjd8fHwQHn8mNtA7dMa0/edit#gid=1802608806
 const MASTER_SHEET = "MASTER_SHEET"
 const USER_SHEET = "USER_SHEET"
 const TASK_SHEET = "TASK_SHEET"
+
+const CELL_RANGE_FORMAT = "%s!%s:%s"
+const (
+	TASK_ID = "taskid"
+	USER_ID = "userid"
+)

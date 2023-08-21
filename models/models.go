@@ -1,8 +1,9 @@
 package models
 
 import (
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"reflect"
+
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type Schema struct {
@@ -19,6 +20,7 @@ type User struct {
 	CreatedAt      int64              `json:"createdAt"`
 	UpdatedAt      int64              `json:"updatedAt"`
 	LastSessionKey string             `json:"lastSessionKey"`
+	RowNumber      int64              `json:"rowNumber"`
 }
 
 type Session struct {
@@ -42,6 +44,7 @@ type Task struct {
 	Type      TaskType           `json:"type"`
 	Complete  bool               `json:"complete"`
 	UpdatedAt int64              `json:"updatedAt"`
+	RowNumber int64              `json:"rowNumber"`
 }
 
 type TaskType string

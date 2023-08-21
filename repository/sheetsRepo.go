@@ -69,19 +69,29 @@ func NewSheetsRepo() *sheetsRepo {
 }
 
 // Save User Row
-func (r *sheetsRepo) SaveUser(*models.User) {
+func (s *sheetsRepo) SaveUser(user *models.User) {
+	// Update value in the sheet.
+	row := &sheets.ValueRange{
+		Values: [][]interface{}{{user.Username, user.CreatedAt, user.UpdatedAt, user.LastSessionKey, user.RowNumber}},
+	}
 
+	cellRange := fmt.Sprintf(utils.CELL_RANGE_FORMAT, *s.userSheetTitle, strconv.Itoa(int(user.RowNumber)), strconv.Itoa(int(user.RowNumber)))
+	response2, err := s.sheetsService.Spreadsheets.Values.Update(*s.masterSheet, cellRange, row).ValueInputOption("USER_ENTERED").Context(context.Background()).Do()
+	if err != nil || response2.HTTPStatusCode != 200 {
+		log.Println(err)
+		return
+	}
 }
 
 // Save Task Row
 func (s *sheetsRepo) SaveTask(task *models.Task) {
-
-	//Append value to the sheet.
+	//Update value in the sheet.
 	row := &sheets.ValueRange{
-		Values: [][]interface{}{{"1", "ABC", "abc1@gmail.com", task.Username, task.Type}},
+		Values: [][]interface{}{{task.Date, task.Username, task.Type, task.Complete, task.UpdatedAt, task.RowNumber}},
 	}
 
-	response2, err := s.sheetsService.Spreadsheets.Values.Append(*s.masterSheet, *s.taskSheetTitle, row).ValueInputOption("USER_ENTERED").Context(context.Background()).Do()
+	cellRange := fmt.Sprintf(utils.CELL_RANGE_FORMAT, *s.taskSheetTitle, strconv.Itoa(int(task.RowNumber)), strconv.Itoa(int(task.RowNumber)))
+	response2, err := s.sheetsService.Spreadsheets.Values.Update(*s.masterSheet, cellRange, row).ValueInputOption("USER_ENTERED").Context(context.Background()).Do()
 	if err != nil || response2.HTTPStatusCode != 200 {
 		log.Println(err)
 		return

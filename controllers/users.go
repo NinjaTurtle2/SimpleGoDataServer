@@ -82,6 +82,17 @@ func LoginUser(user *models.User) (*models.Session, error) {
 	return session, nil
 }
 
+func SyncUserToSheet(userId *string) error {
+	user := repository.MongoRepo.GetUserByID(*userId)
+	if user == nil {
+		return nil
+	}
+	if user.RowNumber > 0 {
+		repository.SheetsRepo.SaveUser(user)
+	}
+	return nil
+}
+
 func updateUser(user *models.User) (*models.User, error) {
 	repository.MongoRepo.UpdateUser(user)
 	return user, nil

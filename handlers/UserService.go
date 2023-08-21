@@ -75,4 +75,18 @@ func LoginUser(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, session)
 }
 
+func UserMongoWebhook(c *gin.Context) {
+	userId := c.Param(utils.USER_ID)
+	if userId == "" {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+	err := controllers.SyncUserToSheet(&userId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, "SUCCESS")
+}
+
 
