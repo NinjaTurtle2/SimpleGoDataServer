@@ -10,6 +10,7 @@ import (
 // Save task model to mongoRepo
 func SaveTask(username *string, task *models.Task) error {
 	err := validateTask(task)
+	transformDate(task)
 	if err != nil {
 		return err
 	}
@@ -35,4 +36,8 @@ func validateTask(task *models.Task) error {
 		return errors.New("invalid TaskType")
 	}
 	return nil
+}
+
+func transformDate(task *models.Task) {
+	task.Date = time.Unix(task.Date/1000, 0).Truncate(time.Hour * 24).UnixMilli()
 }
